@@ -17,10 +17,11 @@ import org.springframework.stereotype.Component;
 public class RabbitBrokerImpl implements RabbitBroker {
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private RabbitTemplateContainer rabbitTemplateContainer;
 
     /**
      * 迅速发消息
+     *
      * @param message
      */
     @Override
@@ -40,6 +41,7 @@ public class RabbitBrokerImpl implements RabbitBroker {
                     System.currentTimeMillis()));
             String topic = message.getTopic();
             String routingKey = message.getRoutingKey();
+            RabbitTemplate rabbitTemplate = rabbitTemplateContainer.getTemplate(message);
             rabbitTemplate.convertAndSend(topic, routingKey, message, correlationData);
             log.info("#RabbitBrokerImpl.sendKernel# send to rabbitmq,messageId:{}", message.getMessageId());
         });
