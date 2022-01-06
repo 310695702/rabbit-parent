@@ -3,6 +3,10 @@ package com.bfxy.rabbit.producer.broker;
 import com.bfxy.rabbit.api.Message;
 import com.bfxy.rabbit.api.MessageType;
 import com.bfxy.rabbit.api.exception.MessageRunTimeException;
+import com.bfxy.rabbit.common.convert.GenericMessageConverter;
+import com.bfxy.rabbit.common.convert.RabbitMessageConverter;
+import com.bfxy.rabbit.common.serializer.SerializerFactory;
+import com.bfxy.rabbit.common.serializer.impl.JacksonSerializerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
@@ -34,6 +38,8 @@ public class RabbitTemplateContainer implements RabbitTemplate.ConfirmCallback {
 
     private Splitter splitter = Splitter.on("#");
 
+    private SerializerFactory serializerFactory = JacksonSerializerFactory.INSTANCE;
+
     @Autowired
     private ConnectionFactory connectionFactory;
 
@@ -50,7 +56,12 @@ public class RabbitTemplateContainer implements RabbitTemplate.ConfirmCallback {
         newTemplate.setExchange(topic);
         newTemplate.setRoutingKey(message.getRoutingKey());
         newTemplate.setRetryTemplate(new RetryTemplate());
-//        newTemplate.setMessageConverter();
+        /**
+         * 添加序列化反序列化和converter对象
+         */
+        GenericMessageConverter gmc = new GenericMessageConverter(serializerFactory.create());
+        RabbitMessageConverter rmc = new RabbitMessageConverter(gmc);
+        newTemplate.setMessageConverter(rmc);
         String messageType = message.getMessageType();
         if (!MessageType.RAPID.equals(messageType)) {
             newTemplate.setConfirmCallback(this);
