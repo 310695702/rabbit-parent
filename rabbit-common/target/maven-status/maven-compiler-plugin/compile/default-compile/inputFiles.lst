@@ -1,0 +1,6 @@
+D:\ideaProjects\rabbit-parent\rabbit-common\src\main\java\com\bfxy\rabbit\common\convert\RabbitMessageConverter.java
+D:\ideaProjects\rabbit-parent\rabbit-common\src\main\java\com\bfxy\rabbit\common\serializer\SerializerFactory.java
+D:\ideaProjects\rabbit-parent\rabbit-common\src\main\java\com\bfxy\rabbit\common\serializer\impl\JacksonSerializer.java
+D:\ideaProjects\rabbit-parent\rabbit-common\src\main\java\com\bfxy\rabbit\common\serializer\Serializer.java
+D:\ideaProjects\rabbit-parent\rabbit-common\src\main\java\com\bfxy\rabbit\common\serializer\impl\JacksonSerializerFactory.java
+D:\ideaProjects\rabbit-parent\rabbit-common\src\main\java\com\bfxy\rabbit\common\convert\GenericMessageConverter.java

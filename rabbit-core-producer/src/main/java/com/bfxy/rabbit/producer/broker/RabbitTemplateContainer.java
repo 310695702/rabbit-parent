@@ -7,6 +7,7 @@ import com.bfxy.rabbit.common.convert.GenericMessageConverter;
 import com.bfxy.rabbit.common.convert.RabbitMessageConverter;
 import com.bfxy.rabbit.common.serializer.SerializerFactory;
 import com.bfxy.rabbit.common.serializer.impl.JacksonSerializerFactory;
+import com.bfxy.rabbit.producer.service.MessageStoreService;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
@@ -42,6 +43,9 @@ public class RabbitTemplateContainer implements RabbitTemplate.ConfirmCallback {
 
     @Autowired
     private ConnectionFactory connectionFactory;
+
+    @Autowired
+    private MessageStoreService messageStoreService;
 
     public RabbitTemplate getTemplate(Message message) throws MessageRunTimeException {
         Preconditions.checkNotNull(message);
@@ -83,6 +87,7 @@ public class RabbitTemplateContainer implements RabbitTemplate.ConfirmCallback {
         String messageId = strings.get(0);
         long sendTime = Long.parseLong(strings.get(1));
         if (ack) {
+            this.messageStoreService.success(messageId);
             log.info("send message is OK, confirm messageId: {}, sendTime:{}", messageId, sendTime);
         } else {
             log.error("send message is Fail, confirm messageId: {}, sendTime:{}", messageId, sendTime);
